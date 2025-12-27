@@ -16,6 +16,7 @@ This module adds QR codes to invoices for quick mobile payments. The codes are i
 Make sure you have the **QR Codes** option enabled in the **Invoicing** app configuration.
 ![QR Code Settings](static/description/qr_payment_settings_en.png)
 
+
 **The QR code is generated on the invoice, but scanning it results in an error**
 Check whether a bank account for the Czech currency is set up for the main company. See "Bank account format" section above.
 ---

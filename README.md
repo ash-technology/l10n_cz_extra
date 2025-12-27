@@ -13,7 +13,7 @@ This repository contains modules that extend the standard Odoo system with speci
 
 In Odoo, go to the Apps module. First, disable the "Apps" filter in the search field, then enter "ash_cz". This will display all modules from this package. The result will look similar to this:
 
-![Module Installation](installation.png)
+![Module Installation](installation_en.png)
 
 Then simply click "Activate" on the modules you want to install.
 
