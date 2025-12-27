@@ -1,0 +1,33 @@
+<odoo>
+    <template id="report_invoice_document_cz" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@id='qrcode']" position="replace">
+            <t t-set="cz_qr_base64" t-value="o.get_cz_qr_code_base64()"/>
+
+            <t t-if="cz_qr_base64">
+                <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside">
+                    <div class="qrcode me-3">
+                        <img t-att-src="'data:image/png;base64,%s' % cz_qr_base64" style="width:140px;height:140px;"/>
+                    </div>
+                    <div class="d-inline text-muted lh-sm fst-italic">
+                        <p class="fw-bold mb-0" style="color: black;">QR Platba</p>
+                        <p>Scan this QR Code with<br/>your banking application</p>
+                    </div>
+                </div>
+            </t>
+            <t t-else="">
+                <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside" t-if="o.display_qr_code and o.amount_residual">
+                    <div class="qrcode me-3" id="qrcode_image">
+                        <t t-set="qr_code_url" t-value="o._generate_qr_code(silent_errors=True)"/>
+                        <p t-if="qr_code_url" class="position-relative mb-0">
+                            <img t-att-src="qr_code_url"/>
+                            <img src="/account/static/src/img/Odoo_logo_O.svg" id="qrcode_odoo_logo" class="top-50 start-50 position-absolute bg-white border border-3 rounded-circle"/>
+                        </p>
+                    </div>
+                    <div class="d-inline text-muted lh-sm fst-italic" id="qrcode_info" t-if="qr_code_url">
+                        <p>Scan this QR Code with<br/>your banking application</p>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

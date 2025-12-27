@@ -1,0 +1,20 @@
+
+#. module: l10n_cz_extra
+#: model:ir.model.fields,field_description:ash_cz_qr_payment.field_account_move__display_name
+msgid "Display Name"
+msgstr "Zobrazovaný název"
+
+#. module: ash_cz_qr_payment
+#: model:ir.model,name:ash_cz_qr_payment.model_account_move
+msgid "Journal Entry"
+msgstr "Účetní záznam"
+
+#. module: ash_cz_qr_payment
+#: model_terms:ir.ui.view,arch_db:ash_cz_qr_payment.report_invoice_document_cz
+msgid "QR Payment"
+msgstr "QR Platba"
+
+#. module: ash_cz_qr_payment
+#: model_terms:ir.ui.view,arch_db:ash_cz_qr_payment.report_invoice_document_cz
+msgid "Scan this QR Code with<br/>your banking application"
+msgstr "Naskenujte tento QR kód v bankovní aplikaci"

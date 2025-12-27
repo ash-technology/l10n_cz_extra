@@ -1,0 +1,200 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ash_cz_ares
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20251222\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-26 17:55+0000\n"
+"PO-Revision-Date: 2025-12-26 17:55+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_partner_form_ares
+msgid ""
+"<span invisible=\"is_unreliable_payer != 'unreliable'\" class=\"text-danger fw-bold ms-2\">\n"
+"                        <i class=\"fa fa-exclamation-triangle\"/> Unreliable Payer\n"
+"                    </span>\n"
+"\n"
+"                    <span invisible=\"is_unreliable_payer != 'reliable'\" class=\"text-success ms-2\">\n"
+"                        <i class=\"fa fa-check-circle\"/> Reliable Payer\n"
+"                    </span>\n"
+"\n"
+"                    <span invisible=\"is_unreliable_payer != 'not_checked'\" class=\"text-muted ms-2 italic\">\n"
+"                        <i class=\"fa fa-question-circle\"/> Not Checked\n"
+"                    </span>"
+msgstr ""
+"<span invisible=\"is_unreliable_payer != 'unreliable'\" class=\"text-danger fw-bold ms-2\">\n"
+"                        <i class=\"fa fa-exclamation-triangle\"/> Nespolehlivý\n"
+"                    </span>\n"
+"\n"
+"                    <span invisible=\"is_unreliable_payer != 'reliable'\" class=\"text-success ms-2\">\n"
+"                        <i class=\"fa fa-check-circle\"/> Spolehlivý \n"
+"                    </span>\n"
+"\n"
+"                    <span invisible=\"is_unreliable_payer != 'not_checked'\" class=\"text-muted ms-2 italic\">\n"
+"                        <i class=\"fa fa-question-circle\"/> Neověřeno \n"
+"                    </span>"
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid "ARES Connection Error: %s"
+msgstr "Chyba spojení ARES"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "Cancel"
+msgstr "Zrušit"
+
+#. module: ash_cz_ares
+#: model:ir.model,name:ash_cz_ares.model_l10n_cz_ares_connector
+msgid "Centralized ARES API Logic"
+msgstr "ARES API Logic"
+
+#. module: ash_cz_ares
+#: model:ir.actions.server,name:ash_cz_ares.action_server_batch_vat_check
+msgid "Check ARES Reliability (Batch)"
+msgstr "Zkontrolovat spolehlivost plátce DPH"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_partner_form_ares
+msgid "Check in ARES"
+msgstr "Zkontrolovat v ARES"
+
+#. module: ash_cz_ares
+#: model:ir.model,name:ash_cz_ares.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "Create Company from ARES"
+msgstr "Vytvořit z ARES"
+
+#. module: ash_cz_ares
+#: model:ir.actions.act_window,name:ash_cz_ares.action_ares_wizard
+#: model:ir.ui.menu,name:ash_cz_ares.menu_ares_wizard_account_cust
+#: model:ir.ui.menu,name:ash_cz_ares.menu_ares_wizard_contact
+msgid "Create from ARES"
+msgstr "Vytvořit z ARES"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__create_uid
+msgid "Created by"
+msgstr "Vytvořil"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__create_date
+msgid "Created on"
+msgstr "Vytvořeno"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_account_move__display_name
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_connector__display_name
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__display_name
+#: model:ir.model.fields,field_description:ash_cz_ares.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Zobrazovaný název"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,help:ash_cz_ares.field_l10n_cz_ares_wizard__ico
+msgid "Enter the 8-digit Company ID"
+msgstr "Zadejte IČ"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid ""
+"Enter the IČO (Identification Number) to fetch details from the Czech "
+"Registry."
+msgstr "Zadejte IČ pro stažení údajů z ARES"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "Fetch & Create"
+msgstr "Vytvořit"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_account_move__id
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_connector__id
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__id
+#: model:ir.model.fields,field_description:ash_cz_ares.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__ico
+msgid "IČO"
+msgstr "IČ"
+
+#. module: ash_cz_ares
+#: model:ir.model,name:ash_cz_ares.model_account_move
+msgid "Journal Entry"
+msgstr "Účetní záznam"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Změnil"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__write_date
+msgid "Last Updated on"
+msgstr "Změněno"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_partner_form_ares
+msgid "UNRELIABLE"
+msgstr "NESPOLEHLIVÝ"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields.selection,name:ash_cz_ares.selection__res_partner__is_unreliable_payer__not_checked
+msgid "Not Checked"
+msgstr "Neověřeno"
+
+#. module: ash_cz_ares
+#: model:ir.ui.menu,name:ash_cz_ares.menu_ares_root
+msgid "Public registers"
+msgstr "Veřejné rejstříky"
+
+#. module: ash_cz_ares
+#: model:ir.actions.server,name:ash_cz_ares.action_server_ares_refresh
+msgid "Refresh from ARES"
+msgstr "Aktualizovat z ARES"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields.selection,name:ash_cz_ares.selection__res_partner__is_unreliable_payer__reliable
+msgid "Reliable"
+msgstr "Spolehlivý"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields.selection,name:ash_cz_ares.selection__res_partner__is_unreliable_payer__unreliable
+msgid "Unreliable"
+msgstr "Nespolehlivý"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_res_partner__is_unreliable_payer
+#: model:ir.model.fields,field_description:ash_cz_ares.field_res_users__is_unreliable_payer
+msgid "VAT Reliability"
+msgstr "Spolehlivost plátce DPH"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_partner_form_ares
+msgid "VAT Status"
+msgstr "Spolehlivost plátce DPH"
+
+#. module: ash_cz_ares
+#: model:ir.model,name:ash_cz_ares.model_l10n_cz_ares_wizard
+msgid "Wizard to create Partner from ARES"
+msgstr "Vytvoření firmy z ARES"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "e.g. O8500045"
+msgstr "např. O8500045"

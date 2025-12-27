@@ -1,0 +1,55 @@
+<odoo>
+    <record id="view_ares_wizard_form" model="ir.ui.view">
+        <field name="name">l10n_cz.ares.wizard.form</field>
+        <field name="model">l10n_cz.ares.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Company from ARES">
+                <sheet>
+                    <group>
+                        <div class="text-muted mb-3" colspan="2">
+                            Enter the IČO (Identification Number) to fetch details from the Czech Registry.
+                        </div>
+                        <field name="ico" placeholder="e.g. 27082440"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_fetch_and_create" string="Fetch &amp; Create" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_server_ares_refresh" model="ir.actions.server">
+        <field name="name">Refresh from ARES</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">form</field>
+        <field name="state">code</field>
+        <field name="code">action = record.action_open_ares_wizard()</field>
+    </record>
+
+    <record id="action_ares_wizard" model="ir.actions.act_window">
+        <field name="name">Create from ARES</field>
+        <field name="res_model">l10n_cz.ares.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field> </record>
+
+    <menuitem id="menu_ares_root"
+              name="Public registers"
+              parent="contacts.menu_contacts"
+              sequence="5"/>
+
+    <menuitem id="menu_ares_wizard_contact"
+              name="Create from ARES"
+              parent="menu_ares_root"
+              action="action_ares_wizard"
+              sequence="10"/>
+
+
+    <menuitem id="menu_ares_wizard_account_cust"
+              name="Create from ARES"
+              parent="account.menu_finance_receivables"
+              action="action_ares_wizard"
+              sequence="100"/>
+</odoo>
