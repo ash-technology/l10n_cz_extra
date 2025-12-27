@@ -29,5 +29,5 @@ Key Features:
     'installable': True,
     'auto_install': False,
     'application': False,
-    'images': ['images/qr_payment_main_screenshot.png'],
+    'images': ['static/description/qr_payment_main_screenshot.png'],
 }

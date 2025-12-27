@@ -30,6 +30,6 @@ Key Features:
     'installable': True,
     'auto_install': False,
     'application': False,
-    'images': ['images/ares_cz_main_screenshot.png'],
+    'images': ['static/description/ares_cz_main_screenshot.png'],
 
 }
