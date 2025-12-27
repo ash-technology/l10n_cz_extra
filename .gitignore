@@ -13,6 +13,7 @@ venv.bak/
 
 # MacOs specific
 .DS_Store/
+.DS_Store
 *.zip
 
 
