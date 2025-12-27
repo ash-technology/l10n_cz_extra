@@ -4,7 +4,7 @@
     'version': '19.0.1.0.0',
     'category': 'Localization',
     'countries': ['cz'],
-    'summary': 'Automatic partner creation via "IČO" and  VAT reliability check (ARES/DPH)',
+    'summary': 'Partner creation via "IČO" and  VAT reliability check (ARES/DPH)',
     'description': """
 This module automates the creation of partners and ensures their VAT reliability.
 
