@@ -4,7 +4,7 @@
     'depends': ['account', 'base', 'l10n_cz'],
     'countries': ['cz'],
     'category': 'Accounting',
-    'summary': 'Add Czech standard QR codes (SPAYD) to your invoices with automatic IBAN conversion.',
+    'summary': 'Add Czech standard QR codes for payment to your invoices.',
     'description': """
 
 Czech QR Payment Generator
