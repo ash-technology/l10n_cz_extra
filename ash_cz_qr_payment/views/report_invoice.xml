@@ -1,5 +1,7 @@
 <odoo>
     <template id="report_invoice_document_cz" inherit_id="account.report_invoice_document">
+        <!-- Known debt: should become a SPAYD QR method on res.partner.bank instead of a replace -->
+        <!-- oca-hooks:disable=xml-dangerous-qweb-replace-low-priority -->
         <xpath expr="//div[@id='qrcode']" position="replace">
             <t t-set="cz_qr_base64" t-value="o.get_cz_qr_code_base64()"/>
 

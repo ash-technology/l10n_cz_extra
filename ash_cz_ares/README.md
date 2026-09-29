@@ -1,35 +1,39 @@
 🇨🇿 [Česká verze](README.cs.md)
 
 # Public Registers Module (ARES, VAT Payer Registry)
-
 ## 1. Automatic Data Retrieval
-
-This module allows you to create a new partner by their Company ID (IČO), or if you use the "Partner Autocomplete" feature, verify the address and name against ARES.
+This module allows you to create a new partner by their Company ID (IČ), or if you use the "Partner Autocomplete" feature, verify the address and name against ARES.
 
 * **Where to find it:** In the Contacts app, in the top menu bar: **Public Registers > Create from ARES**.
-![Create from ARES](static/description/new_from_ares_en.png)
+![Create from ARES](static/description/new_from_ares_menu_en.png)
 * The feature is also available from the **Invoicing app in the Customers menu**
-* **How it works:** Simply enter the 8-digit Company ID (IČO). The system connects to the ARES registry and automatically fills in:
+* Finally, you can enter the IČ directly in the contact form and click the **Load from ARES** button next to the IČ:
+![Load from ARES](static/description/new_from_ares_form_en.png)
+If another contact already has this IČ, the system warns you. The IČ field is shown for Czech partners and for partners without a country.
+
+* **How it works:** Simply enter the 8-digit IČ. The system connects to the ARES registry and automatically fills in:
     * Business name
     * Complete address (including proper street and number formatting)
     * VAT ID (if the entity is a VAT payer)
-    * Company ID into the "Company Registry" field
+    * IČ into the "Company ID" field
 
-* **Updating an existing contact:** On a specific partner's card, you'll find the action **Update from ARES** under the gear icon, which updates the data without needing to re-enter the Company ID.
-![Update from ARES](static/description/update_from_ares_en.png)
+* **Updating an existing contact:**
+In the contact form, check the IČ and click **Load from ARES** as described above. The system overwrites the contact's data with the values from ARES. The data is filled into the form and saved only when you save the contact.
 
+* **VAT group members:**
+If the company is a member of a VAT group, the VAT ID of the group (e.g. CZ699004572) is loaded from ARES into the "VAT" field, because the member's own VAT ID is not valid for VAT. The reliability is then verified for the VAT ID of the group.
 
 ## 2. VAT Payer Reliability Verification
-
 For each Czech partner, the system tracks their reliability status in the VAT registry:
 * **Not verified (gray):** Verification has not yet been performed for this partner.
 * **Reliable payer (green):** The entity is properly registered with no negative records.
+* **Not a VAT payer (orange):** The entity is not in the VAT payer registry. Contacts created from ARES get this status automatically and have no VAT ID filled in.
+* When data is loaded from ARES, VAT payers are verified automatically. If the VAT registry is unavailable, the data is still filled in, the status stays "Not verified" and you are asked to run **Verify VAT Payer** later.
 * **Unreliable payer (red):** The entity is marked as unreliable. In this case, a prominent **red ribbon** is displayed on the partner's card.
 ![Reliability Check](static/description/check_reliability_en.png)
 
 ## 3. Batch Operations
-
-* **Batch verification:** In the contact list (List View), you can select multiple records and use the **Action > Check VAT Payer Reliability** button to update the status of all selected partners at once.
+* **Batch verification:** In the contact list (List View), you can select multiple records and use **Action > Check ARES Reliability (Batch)** to update the status of all selected partners at once.
 ![Batch Reliability Check](static/description/check_reliability_batch_en.png)
 
 ## Frequently Asked Questions (FAQ)

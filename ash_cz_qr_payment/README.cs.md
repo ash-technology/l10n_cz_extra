@@ -1,6 +1,6 @@
 🇬🇧 [English version](README.md)
 
-# QR platby v českém prostředí 
+# QR platby v českém prostředí
 Modul přidává na faktury QR kód pro rychlou platbu mobilem. Kódy jsou ve formátu SPAYD
 
 * **Způsob zadání bankovního účtu** Česká bankovní účty zadávejte do standardního pole Odoo v českém formátu, např. `123-456/0800`
@@ -34,4 +34,3 @@ Pro zakázkový vývoj v Odoo nebo větší projekty nás neváhejte kontaktovat
 ---
 
 *Odoo je ochranná známka společnosti Odoo S.A.*
-

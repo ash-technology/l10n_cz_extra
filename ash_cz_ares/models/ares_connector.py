@@ -1,111 +1,151 @@
+import re
+
 import requests
-from odoo import models, api, _
+from lxml import etree
+
+from odoo import api, models
 from odoo.exceptions import UserError
 
-class AresConnector(models.AbstractModel):
-    _name = 'l10n_cz.ares.connector'
-    _description = 'Centralized ARES API Logic'
+ARES_URL = "https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/{ico}"
+MFCR_SOAP_URL = (
+    "https://adisrws.mfcr.cz/dpr/axis2/services/rozhraniCRPDPH.rozhraniCRPDPHSOAP"
+)
+MFCR_NAMESPACE = "http://adis.mfcr.cz/rozhraniCRPDPH/"
+MFCR_RELIABILITY = {
+    "ANO": "unreliable",
+    "NE": "reliable",
+    # MFCR answers NENALEZEN for any DIC missing from the VAT payer registry
+    "NENALEZEN": "not_vat_payer",
+}
 
-    MFCR_SOAP_URL = "https://adisrws.mfcr.cz/dpr/axis2/services/rozhraniCRPDPH.rozhraniCRPDPHSOAP"
-    MFCR_NAMESPACE = "http://adis.mfcr.cz/rozhraniCRPDPH/"
+
+class AresConnector(models.AbstractModel):
+    _name = "l10n_cz.ares.connector"
+    _description = "Centralized ARES API Logic"
 
     @api.model
     def fetch_ares_data(self, ico):
-        """Fetches company details from ARES by ICO"""
-        url = f"https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/{ico}"
         try:
-            response = requests.get(url, timeout=10)
-            if response.status_code == 200:
-                return response.json()
-            return None
-        except Exception as e:
-            raise UserError(_("ARES Connection Error: %s") % str(e))
+            response = requests.get(ARES_URL.format(ico=ico), timeout=10)
+            if response.status_code == 404:
+                return None
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            raise UserError(
+                self.env._("ARES Connection Error: %(error)s", error=str(e))
+            ) from e
+        return response.json()
 
     @api.model
-    def check_unreliable_payer(self, vat_id):
-        """
-        Check if a VAT payer is unreliable using the official MFČR SOAP service.
-        
-        Returns:
-            True - if the payer is unreliable (nespolehlivý plátce)
-            False - if the payer is reliable or not found in VAT payer registry
-            None - if an error occurred during the check
-        """
-        if not vat_id:
-            return False
-        
-        # Extract DIČ - remove 'CZ' prefix and whitespace, keep only digits
-        dic = vat_id.upper().replace('CZ', '').strip()
-        
-        # Validate DIČ format (1-10 digits)
-        if not dic.isdigit() or len(dic) < 1 or len(dic) > 10:
-            return False
-        
-        # Build SOAP request
+    def _prepare_partner_values(self, ico, current_vat):
+        ico = (ico or "").replace(" ", "")
+        if not re.fullmatch(r"\d{1,8}", ico):
+            raise UserError(self.env._("IČ must consist of 1 to 8 digits."))
+        ico = ico.zfill(8)
+        data = self.fetch_ares_data(ico)
+        if not data:
+            raise UserError(self.env._("IČ %(ico)s was not found in ARES.", ico=ico))
+        if not data.get("obchodniJmeno"):
+            raise UserError(
+                self.env._("ARES returned no business name for IČ %(ico)s.", ico=ico)
+            )
+
+        address = data.get("sidlo", {})
+        full_street = (
+            f"{address.get('nazevUlice', '')} {address.get('cisloDomovni', '')}"
+        )
+        if address.get("cisloOrientacni"):
+            full_street += f"/{address['cisloOrientacni']}"
+        cz_country = self.env.ref("base.cz")
+        values = {
+            "name": data["obchodniJmeno"],
+            "company_registry": ico,
+            "street": full_street.strip(),
+            "city": address.get("nazevObce"),
+            "zip": str(address.get("psc", "")),
+            "country_id": cz_country.id,
+            "is_company": True,
+        }
+        # A VAT group member keeps its own DIC in ARES with an ended registration,
+        # only the group DIC is valid for VAT
+        registrations = data.get("seznamRegistraci", {})
+        dic = False
+        if registrations.get("stavZdrojeSkDph") == "AKTIVNI":
+            dic = data.get("dicSkDph")
+        elif registrations.get("stavZdrojeDph") == "AKTIVNI":
+            dic = data.get("dic")
+        warning = False
+        if not dic:
+            values["is_unreliable_payer"] = "not_vat_payer"
+            return values, warning
+
+        values["vat"] = dic
+        try:
+            values["is_unreliable_payer"] = self._get_vat_reliability(dic)
+        except UserError as e:
+            # Deliberate fallback: keep the ARES data so the user can re-run the check;
+            # an unchanged DIC keeps its previous result (e.g. unreliable).
+            warning = self.env._(
+                "VAT payer reliability could not be verified, verify it later "
+                "manually: %(error)s",
+                error=str(e),
+            )
+            if dic != current_vat:
+                values["is_unreliable_payer"] = "not_checked"
+        return values, warning
+
+    @api.model
+    def _get_vat_reliability(self, vat):
+        match = re.fullmatch(r"(?:CZ)?(\d{8,10})", vat.replace(" ", "").upper())
+        if not match:
+            return "not_checked"
+
         soap_envelope = f"""<?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                  xmlns:roz="{self.MFCR_NAMESPACE}">
+                  xmlns:roz="{MFCR_NAMESPACE}">
     <soapenv:Header/>
     <soapenv:Body>
         <roz:StatusNespolehlivyPlatceRequest>
-            <roz:dic>{dic}</roz:dic>
+            <roz:dic>{match.group(1)}</roz:dic>
         </roz:StatusNespolehlivyPlatceRequest>
     </soapenv:Body>
 </soapenv:Envelope>"""
-
         headers = {
-            'Content-Type': 'text/xml; charset=utf-8',
-            'SOAPAction': 'http://adis.mfcr.cz/rozhraniCRPDPH/getStatusNespolehlivyPlatce',
+            "Content-Type": "text/xml; charset=utf-8",
+            "SOAPAction": f"{MFCR_NAMESPACE}getStatusNespolehlivyPlatce",
         }
-
         try:
             response = requests.post(
-                self.MFCR_SOAP_URL,
-                data=soap_envelope.encode('utf-8'),
+                MFCR_SOAP_URL,
+                data=soap_envelope.encode("utf-8"),
                 headers=headers,
-                timeout=10
+                timeout=10,
             )
-            
-            if response.status_code == 200:
-                return self._parse_unreliable_payer_response(response.text)
-            
-            return None
-            
-        except requests.exceptions.Timeout:
-            return None
-        except requests.exceptions.RequestException:
-            return None
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            raise UserError(
+                self.env._(
+                    "VAT registry (MFČR) Connection Error: %(error)s", error=str(e)
+                )
+            ) from e
 
-    @api.model
-    def _parse_unreliable_payer_response(self, xml_response):
-        """
-        Parse SOAP response to extract nespolehlivyPlatce attribute.
-        
-        Returns:
-            True - if nespolehlivyPlatce="ANO"
-            False - if nespolehlivyPlatce="NE" or "NENALEZEN"
-            None - if parsing failed
-        """
-        try:
-            import re
-            
-            # Look for nespolehlivyPlatce attribute in the response
-            # The attribute can be in statusPlatceDPH element
-            match = re.search(r'nespolehlivyPlatce\s*=\s*["\'](\w+)["\']', xml_response)
-            
-            if match:
-                status = match.group(1).upper()
-                if status == 'ANO':
-                    return True
-                elif status in ('NE', 'NENALEZEN'):
-                    return False
-            
-            # If no statusPlatceDPH found, check if the response indicates no results
-            # This can happen when DIČ is not registered as VAT payer
-            if 'statusPlatceDPH' not in xml_response:
-                return False
-                
-            return None
-            
-        except Exception:
-            return None
+        root = etree.fromstring(response.content)
+        namespaces = {"r": MFCR_NAMESPACE}
+        status = root.find(".//r:status", namespaces)
+        if status is None or status.get("statusCode") != "0":
+            raise UserError(
+                self.env._(
+                    "VAT registry (MFČR) returned an error: %(error)s",
+                    error=status.get("statusText") if status is not None else "",
+                )
+            )
+        payer = root.find(".//r:statusPlatceDPH", namespaces)
+        value = payer.get("nespolehlivyPlatce") if payer is not None else None
+        if value not in MFCR_RELIABILITY:
+            raise UserError(
+                self.env._(
+                    "VAT registry (MFČR) returned an unknown status: %(status)s",
+                    status=value,
+                )
+            )
+        return MFCR_RELIABILITY[value]

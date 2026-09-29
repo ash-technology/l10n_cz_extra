@@ -1,5 +1,19 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+*.py[cod]
+
+# Distribution / packaging
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Test / lint / type-check caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
 # Environments
 .env
@@ -11,9 +25,27 @@ ENV/
 env.bak/
 venv.bak/
 
-# MacOs specific
-.DS_Store/
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific
 .DS_Store
+Thumbs.db
+
+# Syncthing sync-conflict soubory (pozůstatek historie tohoto repa)
+*.sync-conflict-*
+
+# Odoo module packaging
 *.zip
 
+# Local developer notes (may contain credentials)
+ash_cz_ares/notes.md
 
+*.log
+
+# AI Agents
+.claude/

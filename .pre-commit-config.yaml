@@ -1,0 +1,53 @@
+# Trimmed from OCA/partner-contact@19.0: OCA-only hooks (whool, maintainer-tools)
+# and Node based hooks (prettier, eslint) are left out.
+exclude: |
+  (?x)
+  /static/description/index\.html$|
+  (LICENSE.*|COPYING.*)
+default_language_version:
+  python: python3
+repos:
+  - repo: local
+    hooks:
+      - id: forbidden-files
+        name: forbidden files
+        entry: found forbidden files; remove them
+        language: fail
+        files: "\\.rej$"
+      - id: en-po-files
+        name: en.po files cannot exist
+        entry: found a en.po file
+        language: fail
+        files: '[a-zA-Z0-9_]*/i18n/en\.po$'
+  - repo: https://github.com/OCA/odoo-pre-commit-hooks
+    rev: v0.1.6
+    hooks:
+      - id: oca-checks-odoo-module
+      - id: oca-checks-po
+        args:
+          - --disable=po-pretty-format
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.pot?$
+      - id: end-of-file-fixer
+        exclude: \.pot?$
+      - id: debug-statements
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-xml
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.13.0
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+  - repo: https://github.com/OCA/pylint-odoo
+    rev: v9.3.15
+    hooks:
+      - id: pylint_odoo
+        args:
+          - --rcfile=.pylintrc

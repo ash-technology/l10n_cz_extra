@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ash_cz_ares.AresCompanyRegistryField" t-inherit="web.CharField" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_field_input_buttons')]" position="after">
+            <button type="button" class="btn btn-link text-nowrap" t-on-click="onFetchFromAres">
+                <i class="o_button_icon fa fa-fw fa-download me-1"/>
+                <span>Load from ARES</span>
+            </button>
+        </xpath>
+    </t>
+</templates>
