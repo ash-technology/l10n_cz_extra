@@ -1,0 +1,61 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ash_cz_qr_payment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260908\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 17:17+0000\n"
+"PO-Revision-Date: 2026-10-01 17:17+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#. module: ash_cz_qr_payment
+#: model_terms:ir.ui.view,arch_db:ash_cz_qr_payment.report_invoice_document
+msgid "<br/>IBAN:"
+msgstr "<br/>IBAN:"
+
+#. module: ash_cz_qr_payment
+#. odoo-python
+#: code:addons/ash_cz_qr_payment/models/res_bank.py:0
+msgid "An IBAN account number is required to generate the QR code."
+msgstr "Pro vygenerování QR kódu je nutné číslo účtu ve formátu IBAN."
+
+#. module: ash_cz_qr_payment
+#: model:ir.model,name:ash_cz_qr_payment.model_res_partner_bank
+msgid "Bank Accounts"
+msgstr "Bankovní účty"
+
+#. module: ash_cz_qr_payment
+#. odoo-python
+#: code:addons/ash_cz_qr_payment/models/res_bank.py:0
+msgid "CZK QR"
+msgstr "QR Platba"
+
+#. module: ash_cz_qr_payment
+#: model:ir.model.fields,field_description:ash_cz_qr_payment.field_res_partner_bank__display_name
+msgid "Display Name"
+msgstr "Zobrazovaný název"
+
+#. module: ash_cz_qr_payment
+#: model:ir.model.fields,field_description:ash_cz_qr_payment.field_res_partner_bank__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ash_cz_qr_payment
+#. odoo-python
+#: code:addons/ash_cz_qr_payment/models/res_bank.py:0
+msgid "The bank account currency must be CZK to generate the QR code."
+msgstr "Pro vygenerování QR kódu musí být měna bankovního účtu CZK."
+
+#. module: ash_cz_qr_payment
+#. odoo-python
+#: code:addons/ash_cz_qr_payment/models/res_bank.py:0
+msgid "The bank account type must be IBAN to generate the QR code."
+msgstr "Pro vygenerování QR kódu musí být bankovní účet typu IBAN."

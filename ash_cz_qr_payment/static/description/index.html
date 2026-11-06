@@ -1,12 +1,24 @@
 <section class="oe_container">
     <div class="oe_row oe_spaced">
         <div class="oe_span12">
-            <h2 class="oe_slogan">Czech QR Payment Generator</h2>
-            <h3 class="oe_slogan">SPAYD-compliant QR Codes for Invoices</h3>
+            <h2 class="oe_slogan">Czech QR Payment (QR Platba)</h2>
+            <h3 class="oe_slogan">Payment QR codes and Czech account numbers on your CZK invoices</h3>
             <p class="oe_mt32 text-center">
-                Add Czech-standard QR codes to your invoices for instant mobile payments.
-                Compatible with all major Czech banking apps.
+                Your customers scan the QR code with their Czech banking app and the payment is filled in for them:
+                account, amount, variable symbol, due date and message.
             </p>
+            <div class="alert alert-info oe_mt32">
+                <b>Bank account as IBAN.</b> Enter your company bank account as IBAN, e.g.
+                <code>CZ65 0800 0000 1920 0014 5399</code>: the QR code requires it, and with the Czech format
+                <code>123-456/0800</code> the invoice gets no QR code. Your customers still see the familiar account
+                number: the module extends the standard invoice report to print the Czech format derived from the IBAN,
+                e.g. <code>19-2000145399/0800</code>, with the IBAN on the next line.
+            </div>
+            <div class="alert alert-warning">
+                <b>Upgrading from version 19.0.1.x?</b> Read the <b>Upgrade notes</b> further below
+                before you upgrade. If you print invoices with a copy of the invoice report (e.g. duplicated in Studio),
+                read <b>Copies of the invoice report</b> too: module updates don't reach the copy.
+            </div>
         </div>
     </div>
 </section>
@@ -15,23 +27,36 @@
     <div class="oe_row oe_spaced">
         <h2 class="oe_slogan">Key Features</h2>
         <div class="oe_span6">
-            <h3><b>SPAYD Standard</b></h3>
-            <p>Generate QR codes in the official Czech SPAYD format, fully compatible with:</p>
-            <ul>
-                <li>Ceska sporitelna</li>
-                <li>CSOB</li>
-                <li>Komercni banka</li>
-                <li>Raiffeisenbank</li>
-                <li>And all other major Czech banks</li>
-            </ul>
-            <p>Your customers can simply scan the code with their banking app and pay instantly.</p>
+            <h3><b>QR Platba on CZK invoices</b></h3>
+            <p>QR Platba (SPAYD) is the Czech Banking Association standard for payment QR codes,
+               read by Czech banking apps.</p>
+            <p>The module adds it as a standard Odoo payment QR method, like the SEPA QR code.
+               It appears in the usual place on the invoice PDF and in the customer portal,
+               on unpaid customer invoices in CZK.</p>
         </div>
         <div class="oe_span6">
-            <h3><b>Smart Account Format</b></h3>
-            <p>Enter Czech bank accounts in the familiar local format:</p>
-            <p><code>123-456/0800</code></p>
-            <p>The module automatically converts them to IBAN when generating the QR code.
-               Foreign accounts can be entered directly as IBAN.</p>
+            <h3><b>Czech account number and IBAN</b></h3>
+            <p>For a Czech IBAN, the invoice prints the account number in the Czech format,
+               e.g. <code>19-2000145399/0800</code>, and the IBAN on the next line. Customers who pay by hand
+               can use the format their banking app accepts.</p>
+            <p>The Czech format is taken from the IBAN according to CNB Decree No. 169/2011 Coll.,
+               so both always identify the same account as the QR code.</p>
+        </div>
+        <div class="oe_span12">
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img class="img img-responsive" src="qr_payment_invoice.png" alt="Invoice with the Czech account number, the IBAN and the QR code"/>
+            </div>
+        </div>
+        <div class="oe_span6">
+            <h3><b>Complete payment data</b></h3>
+            <p>The QR code contains the IBAN, the amount due, the due date, the payment reference as the message,
+               the recipient name and the variable symbol made of the digits of the invoice number.</p>
+        </div>
+        <div class="oe_span6">
+            <h3><b>Ready for Odoo 20</b></h3>
+            <p>The QR method is the same as in the Czech localization of Odoo 20: when you migrate to Odoo 20,
+               uninstall this module. Odoo 20 prints only the IBAN on the invoice; the Czech account number
+               is a feature of this module and disappears with it.</p>
         </div>
     </div>
 </section>
@@ -39,26 +64,18 @@
 <section class="oe_container">
     <div class="oe_row oe_spaced">
         <div class="oe_span6">
-            <div class="oe_demo oe_picture oe_screenshot">
-                <img class="img img-responsive" src="bank_account_en.png" alt="Bank account entry"/>
-            </div>
-        </div>
-        <div class="oe_span6">
-            <h3><b>Easy Setup</b></h3>
-            <p>Simply enter your bank account in the standard Odoo field using the Czech format.
-               No additional configuration needed.</p>
-            <p>The QR code appears automatically on invoices with CZK currency.</p>
-            <p><b>Note:</b> For foreign currency invoices, the original Odoo QR code is preserved.</p>
-        </div>
-    </div>
-</section>
-
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
-        <div class="oe_span6">
-            <h3><b>Seamless Integration</b></h3>
-            <p>Works with standard Odoo invoice templates. No need to modify your existing reports.</p>
-            <p>The QR code is generated automatically and placed in the appropriate position on your invoices.</p>
+            <h3><b>Setup</b></h3>
+            <ol>
+                <li>Enable <b>QR Codes</b>: Invoicing &gt; Configuration &gt; Settings.</li>
+                <li>Enter your company bank account as IBAN, e.g. <code>CZ65 0800 0000 1920 0014 5399</code>,
+                    in Contacts &gt; Configuration &gt; Bank Accounts or in your bank journal (<b>Bank Account Number</b>).
+                    The Czech format <code>123-456/0800</code> is not supported, but the invoice prints it for you.</li>
+                <li>Enable <b>Send Money</b> on the account.</li>
+                <li>With several bank accounts, set the <b>Currency</b> of each. A new invoice gets the first trusted account
+                    in its currency (or without a currency) as the <b>Recipient Bank</b>.</li>
+            </ol>
+            <p>The QR code is shown only on unpaid CZK invoices, not on credit notes and paid invoices.
+               QR Platba allows at most 10 digits in the variable symbol, so keep your invoice numbering within 10 digits.</p>
         </div>
         <div class="oe_span6">
             <div class="oe_demo oe_picture oe_screenshot">
@@ -68,21 +85,156 @@
     </div>
 </section>
 
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan">Upgrade notes</h2>
+
+            <h3><b>Upgrading from version 19.0.1.x</b></h3>
+            <p>Version 19.0.2.x replaces the module's own QR code with the standard Odoo QR method.
+               Go through the points below before you upgrade. If you can't do it now, stay on 19.0.1.0.0
+               and don't replace the module files yet; that version stays available as the tag
+               <code>ash_cz_qr_payment-19.0.1.0.0</code> in the GitHub repository <code>ash-technology/l10n_cz_extra</code>.</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr><th></th><th>19.0.1.x</th><th>19.0.2.x</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Account</td>
+                        <td>the first company bank account in CZK (or without a currency); version 19.0.1.x ignored the account on the invoice</td>
+                        <td>the account printed on the invoice</td>
+                    </tr>
+                    <tr>
+                        <td>Account format</td>
+                        <td>the Czech format <code>123-456/0800</code> was converted to IBAN by the module</td>
+                        <td>must be entered as <b>IBAN</b>; with the Czech format, the invoice gets no QR code.
+                            The invoice still prints the Czech format, next to the IBAN</td>
+                    </tr>
+                    <tr>
+                        <td>Send Money</td>
+                        <td>not checked</td>
+                        <td>required: Odoo does not process an invoice with an untrusted company account, and automated
+                            processes remove such an account from the invoice, so it gets no QR code</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><b>Before you upgrade</b></p>
+            <ol>
+                <li>Open the company bank account from your bank journal (field <b>Bank Account Number</b>)
+                    and replace the number with the IBAN in the same record. Don't create a new account:
+                    invoices that already use this account then get the IBAN too.</li>
+                <li>Enable <b>Send Money</b> on the account.</li>
+                <li>If the company has several bank accounts, set the <b>Currency</b> of each,
+                    so that CZK invoices get the CZK account as the Recipient Bank.</li>
+                <li>Make sure <b>QR Codes</b> is enabled (Invoicing &gt; Configuration &gt; Settings).
+                    Version 19.0.1.x printed the QR code regardless of this setting; without it
+                    the invoices get no QR code.</li>
+                <li>On unpaid invoices created before the upgrade, check the <b>Recipient Bank</b>
+                    (Other Info tab): invoices keep the account they were created with.</li>
+                <li>If you print invoices with a copy of the invoice report, fix it as described in
+                    <b>Copies of the invoice report</b> below (cases 1 and 2).</li>
+            </ol>
+            <p><b>Other changes</b></p>
+            <ul>
+                <li>The QR code follows the <b>QR Codes</b> setting and is printed only on unpaid customer
+                    invoices in CZK. Version 19.0.1.x printed it on every CZK invoice, including credit notes,
+                    paid invoices and vendor bills.</li>
+                <li>The variable symbol is still made of digits only, but it is now taken from the invoice number
+                    instead of the payment reference, and it is not shortened to 10 digits (the same as in Odoo 20).
+                    With the default journal setting, where the payment reference is the invoice number, nothing changes.</li>
+                <li>The code also contains the due date, the payment reference as the message (up to 60 characters)
+                    and the recipient name.</li>
+                <li>Invoices that were already sent keep their PDF, including the old QR code.</li>
+            </ul>
+            <p><b>How to upgrade</b></p>
+            <p>Replace the module files and upgrade the module right away (Apps &gt; Upgrade):
+               between these two steps, printing invoices fails. Odoo.sh upgrades the module automatically
+               when you push the new version to the repository.</p>
+        </div>
+    </div>
+</section>
+
 <section class="oe_container">
     <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan">Frequently Asked Questions</h2>
         <div class="oe_span12">
-            <p><b>The QR code is not appearing on my invoices</b></p>
-            <p>Make sure you have the <b>QR Codes</b> option enabled in your Invoicing app settings
-               (Settings &gt; Invoicing &gt; Customer Invoices &gt; QR Codes).</p>
-            <p class="oe_mt16"><b>Which currencies are supported?</b></p>
-            <p>Czech SPAYD QR codes are generated for invoices in CZK currency only.
-               For other currencies, the standard Odoo QR code format is used.</p>
+            <h2 class="oe_slogan">Copies of the invoice report</h2>
+            <p>Module updates don't propagate changes to a copy of the invoice report (e.g. from Odoo Studio,
+               typically <code>account.report_invoice_document_copy_1</code>). The report then has to be edited manually.
+               You can do it in developer mode: Settings &gt; Technical &gt; User Interface &gt; Views,
+               open the report and change its <b>Architecture</b>. Change only the parts described in the following
+               points and check the result by printing an invoice.</p>
+
+            <h3 class="oe_mt32"><b>1. Copy made with version 19.0.1.x</b></h3>
+            <p>The copy still contains the old QR code block, and printing fails with
+               <code>'account.move' object has no attribute 'get_cz_qr_code_base64'</code>. In the architecture:</p>
+            <ol>
+                <li>delete the old QR code block:
+<pre>&lt;t t-set="cz_qr_base64" t-value="o.get_cz_qr_code_base64()"/&gt;
+
+&lt;t t-if="cz_qr_base64"&gt;
+    &lt;div id="qrcode" class="d-flex mb-3 avoid-page-break-inside"&gt;
+        &lt;div class="qrcode me-3"&gt;
+            &lt;img t-att-src="'data:image/png;base64,%s' % cz_qr_base64" style="width:140px;height:140px;"/&gt;
+        &lt;/div&gt;
+        &lt;div class="d-inline text-muted lh-sm fst-italic"&gt;
+            &lt;p class="fw-bold mb-0" style="color: black;"&gt;QR Platba&lt;/p&gt;
+            &lt;p&gt;Scan this QR Code with&lt;br/&gt;your banking application&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/t&gt;</pre></li>
+                <li>the following <code>&lt;div id="qrcode" … t-if="o.display_qr_code and o.amount_residual"&gt;</code>
+                    is wrapped in <code>&lt;t t-else=""&gt;</code> and <code>&lt;/t&gt;</code>: remove these two tags,
+                    but keep the div. This div prints the working QR code.</li>
+            </ol>
+
+            <h3 class="oe_mt32"><b>2. Czech account number in a copy</b></h3>
+            <p>A copy made before you installed this version of the module prints only the IBAN. Replace this part:</p>
+<pre>&lt;t t-if="o.partner_bank_id"&gt;
+    &lt;br/&gt; on this account: &lt;span t-field="o.partner_bank_id" class="fw-bold"/&gt;
+&lt;/t&gt;</pre>
+            <p>with:</p>
+<pre>&lt;t t-if="o.partner_bank_id"&gt;
+    &lt;br/&gt; on this account: &lt;span t-if="not o.partner_bank_id._get_cz_acc_number()" t-field="o.partner_bank_id" class="fw-bold"/&gt;
+    &lt;t t-else=""&gt;
+        &lt;span class="fw-bold"&gt;&lt;span class="text-nowrap" t-out="o.partner_bank_id._get_cz_acc_number()"/&gt;&lt;t t-if="o.partner_bank_id.bank_id"&gt; - &lt;t t-out="o.partner_bank_id.bank_id.name"/&gt;&lt;/t&gt;&lt;/span&gt;
+        &lt;br/&gt;IBAN: &lt;span class="fw-bold text-nowrap" t-field="o.partner_bank_id.acc_number"/&gt;
+    &lt;/t&gt;
+&lt;/t&gt;</pre>
+            <p>The text "on this account:" stays as it is, so its translation is kept.</p>
+
+            <h3 class="oe_mt32"><b>3. Before you uninstall the module (Odoo 20)</b></h3>
+            <p>A copy that contains <code>_get_cz_acc_number</code> fails to print once the module is uninstalled.
+               Before you uninstall it, put the original part back: replace the block from case 2
+               with the first snippet of case 2.</p>
         </div>
     </div>
 </section>
 
 <section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Frequently Asked Questions</h2>
+        <div class="oe_span12">
+            <p><b>The QR code is not appearing on my invoices</b></p>
+            <p>Make sure <b>QR Codes</b> is enabled (Invoicing &gt; Configuration &gt; Settings).
+               On the invoice, select <b>CZK QR</b> in the <b>Payment QR-code</b> field (Other Info tab):
+               Odoo then tells you what is missing, e.g. the account is not an IBAN.</p>
+            <p class="oe_mt16"><b>Printing fails with "'account.move' object has no attribute 'get_cz_qr_code_base64'"</b></p>
+            <p>Your invoice report is a copy made with version 19.0.1.x. See <b>Copies of the invoice report</b>, case 1.</p>
+            <p class="oe_mt16"><b>The invoice shows only the IBAN, not the Czech account number</b></p>
+            <p>Either the Recipient Bank of the invoice is not a Czech IBAN (starting with CZ), or you print invoices
+               with a copy of the invoice report. See <b>Copies of the invoice report</b>, case 2.</p>
+            <p class="oe_mt16"><b>The invoice shows a QR code that opens a web page</b></p>
+            <p>That is a different feature: the QR code for paying online via the customer portal (payment providers).
+               It is enabled by the <b>Add QR-code link on PDF</b> setting and does not depend on this module.</p>
+            <p class="oe_mt16"><b>Which currencies are supported?</b></p>
+            <p>QR Platba codes are generated for invoices in CZK only. Invoices in other currencies use the other
+               QR methods of Odoo, e.g. the SEPA QR code for EUR.</p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container">
     <div class="oe_row oe_spaced">
         <div class="oe_span12 text-center">
             <h2 class="oe_slogan">About the Developer</h2>
@@ -91,22 +243,23 @@
                 an official Odoo partner based in the Czech Republic.
             </p>
             <p>
+                The code of the QR method is taken from the <code>czk_qr</code> method of the <code>l10n_cz</code> module
+                of Odoo 20.0 Community (© Odoo S.A., LGPL-3) and adapted to Odoo 19.
+            </p>
+            <p>
                 This module is free and open-source. We welcome your feedback and feature requests –
                 if your idea benefits the community, we're happy to include it.
             </p>
             <p class="oe_mt16">
                 <b>Contact us:</b><br/>
-                Web: <a href="https://www.ashtechnology.eu">www.ashtechnology.eu</a><br/>
-                Email: info@ashtechnology.eu
-            </p>
-            <p class="oe_mt16">
-                For custom Odoo development or larger projects, feel free to reach out.
+                Web: www.ashtechnology.eu<br/>
+                Email: <a href="mailto:info@ashtechnology.eu">info@ashtechnology.eu</a>
             </p>
         </div>
     </div>
 </section>
 
-<section class="oe_container">
+<section class="oe_container oe_dark">
     <div class="oe_row">
         <div class="oe_span12 text-center">
             <p><small>Odoo is a trademark of Odoo S.A.</small></p>

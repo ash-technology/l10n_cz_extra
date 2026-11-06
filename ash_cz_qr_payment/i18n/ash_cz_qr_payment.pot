@@ -1,0 +1,60 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ash_cz_qr_payment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260908\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-01 21:31+0000\n"
+"PO-Revision-Date: 2026-11-01 21:31+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ash_cz_qr_payment
+#: model_terms:ir.ui.view,arch_db:ash_cz_qr_payment.report_invoice_document
+msgid "<br/>IBAN:"
+msgstr ""
+
+#. module: ash_cz_qr_payment
+#. odoo-python
+#: code:addons/ash_cz_qr_payment/models/res_bank.py:0
+msgid "An IBAN account number is required to generate the QR code."
+msgstr ""
+
+#. module: ash_cz_qr_payment
+#: model:ir.model,name:ash_cz_qr_payment.model_res_partner_bank
+msgid "Bank Accounts"
+msgstr ""
+
+#. module: ash_cz_qr_payment
+#. odoo-python
+#: code:addons/ash_cz_qr_payment/models/res_bank.py:0
+msgid "CZK QR"
+msgstr ""
+
+#. module: ash_cz_qr_payment
+#: model:ir.model.fields,field_description:ash_cz_qr_payment.field_res_partner_bank__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ash_cz_qr_payment
+#: model:ir.model.fields,field_description:ash_cz_qr_payment.field_res_partner_bank__id
+msgid "ID"
+msgstr ""
+
+#. module: ash_cz_qr_payment
+#. odoo-python
+#: code:addons/ash_cz_qr_payment/models/res_bank.py:0
+msgid "The bank account currency must be CZK to generate the QR code."
+msgstr ""
+
+#. module: ash_cz_qr_payment
+#. odoo-python
+#: code:addons/ash_cz_qr_payment/models/res_bank.py:0
+msgid "The bank account type must be IBAN to generate the QR code."
+msgstr ""

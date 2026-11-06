@@ -1,34 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="report_invoice_document_cz" inherit_id="account.report_invoice_document">
-        <!-- Known debt: should become a SPAYD QR method on res.partner.bank instead of a replace -->
-        <!-- oca-hooks:disable=xml-dangerous-qweb-replace-low-priority -->
-        <xpath expr="//div[@id='qrcode']" position="replace">
-            <t t-set="cz_qr_base64" t-value="o.get_cz_qr_code_base64()"/>
-
-            <t t-if="cz_qr_base64">
-                <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside">
-                    <div class="qrcode me-3">
-                        <img t-att-src="'data:image/png;base64,%s' % cz_qr_base64" style="width:140px;height:140px;"/>
-                    </div>
-                    <div class="d-inline text-muted lh-sm fst-italic">
-                        <p class="fw-bold mb-0" style="color: black;">QR Platba</p>
-                        <p>Scan this QR Code with<br/>your banking application</p>
-                    </div>
-                </div>
-            </t>
+    <template id="report_invoice_document" inherit_id="account.report_invoice_document">
+        <!-- Czech accounts: the national account number, the IBAN on its own line -->
+        <xpath expr="//p[@name='payment_communication']/t/span[@t-field='o.partner_bank_id']" position="attributes">
+            <attribute name="t-if">not o.partner_bank_id._get_cz_acc_number()</attribute>
+        </xpath>
+        <xpath expr="//p[@name='payment_communication']/t/span[@t-field='o.partner_bank_id']" position="after">
             <t t-else="">
-                <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside" t-if="o.display_qr_code and o.amount_residual">
-                    <div class="qrcode me-3" id="qrcode_image">
-                        <t t-set="qr_code_url" t-value="o._generate_qr_code(silent_errors=True)"/>
-                        <p t-if="qr_code_url" class="position-relative mb-0">
-                            <img t-att-src="qr_code_url"/>
-                            <img src="/account/static/src/img/Odoo_logo_O.svg" id="qrcode_odoo_logo" class="top-50 start-50 position-absolute bg-white border border-3 rounded-circle"/>
-                        </p>
-                    </div>
-                    <div class="d-inline text-muted lh-sm fst-italic" id="qrcode_info" t-if="qr_code_url">
-                        <p>Scan this QR Code with<br/>your banking application</p>
-                    </div>
-                </div>
+                <span class="fw-bold"><span class="text-nowrap" t-out="o.partner_bank_id._get_cz_acc_number()"/><t t-if="o.partner_bank_id.bank_id"> - <t t-out="o.partner_bank_id.bank_id.name"/></t></span>
+                <br/>IBAN: <span class="fw-bold text-nowrap" t-field="o.partner_bank_id.acc_number"/>
             </t>
         </xpath>
     </template>

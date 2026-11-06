@@ -1,21 +1,14 @@
 {
-    "name": "Czech QR Payment (SPAYD)",
-    "version": "19.0.1.0.0",
-    "depends": ["account", "base", "l10n_cz"],
+    "name": "Czech QR Payment (QR Platba / SPAYD)",
+    "version": "19.0.2.1.0",
+    "depends": ["account", "base_iban"],
     "countries": ["cz"],
-    "category": "Accounting",
-    "summary": "Add Czech standard QR codes for payment to your invoices.",
+    "category": "Accounting/Localizations",
+    "summary": "Czech QR Platba (SPAYD) payment QR codes on CZK invoices.",
     "author": "Ash technology s.r.o.",
     "website": "https://github.com/ash-technology/l10n_cz_extra",
     "license": "LGPL-3",
-    "external_dependencies": {
-        "python": ["qrcode"],
-    },
-    "data": [
-        "views/report_invoice.xml",
-    ],
+    "data": ["views/report_invoice.xml"],
     "installable": True,
-    "auto_install": False,
-    "application": False,
     "images": ["static/description/qr_payment_main_screenshot.png"],
 }
