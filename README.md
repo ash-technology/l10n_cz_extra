@@ -17,6 +17,16 @@ In Odoo, go to the Apps module. First, disable the "Apps" filter in the search f
 
 Then simply click "Activate" on the modules you want to install.
 
+## Upgrade
+
+After installing a new version of the modules, upgrade them: in Apps, open the module and click **Upgrade**, or restart Odoo with `-u ash_cz_ares,ash_cz_qr_payment`. Odoo.sh does this automatically when the module version changes. Until the upgrade, some features (e.g. printing invoices) may report errors.
+
+Version 19.0.2.x of `ash_cz_qr_payment` changes the requirements on the bank account and affects copies of the invoice report: read [its upgrade notes](ash_cz_qr_payment/README.md#upgrading-from-version-1901x) before you upgrade it. If you print invoices with a copy of the invoice report (e.g. duplicated in Studio), module updates don't reach the copy: see [Copies of the invoice report](ash_cz_qr_payment/README.md#copies-of-the-invoice-report-eg-studio).
+
+## Development
+
+The modules are developed with the help of AI coding agents, under human review. Conventions and the AI-assistance statement are in [AGENTS.md](AGENTS.md).
+
 ---
 
 ## About

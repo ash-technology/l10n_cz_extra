@@ -15,6 +15,16 @@ V Odoo v modulu Aplikace nejprve ve vyhledávacím poli vypněte filtr na "Aplik
 
 Následně už jen kliknete na "Aktivovat" u těch modulů, které chcete nainstalovat.
 
+## Aktualizace modulů
+
+Po nahrání nové verze moduly aktualizujte: v Aplikacích otevřete modul a klikněte na **Upgrade**, nebo restartujte Odoo s parametrem `-u ash_cz_ares,ash_cz_qr_payment`. Odoo.sh to udělá automaticky, když se změní verze modulu. Do aktualizace mohou některé funkce (např. tisk faktur) hlásit chybu.
+
+Verze 19.0.2.x modulu `ash_cz_qr_payment` mění požadavky na bankovní účet a týká se i kopií šablony faktury: před jejím upgradem si přečtěte [poznámky k přechodu](ash_cz_qr_payment/README.cs.md#přechod-z-verze-1901x). Pokud tisknete faktury z kopie šablony faktury (např. zduplikované ve Studiu), aktualizace modulu se do kopie nepropíší: viz [Kopie šablony faktury](ash_cz_qr_payment/README.cs.md#kopie-šablony-faktury-např-studio).
+
+## Vývoj
+
+Moduly vyvíjíme s pomocí AI agentů pod lidskou kontrolou. Konvence a prohlášení o využití AI jsou v souboru [AGENTS.md](AGENTS.md).
+
 ---
 
 ## O projektu
