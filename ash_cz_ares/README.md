@@ -2,7 +2,7 @@
 
 # Public Registers Module (ARES, VAT Payer Registry)
 ## 1. Automatic Data Retrieval
-This module allows you to create a new partner by their Company ID (IČ), or if you use the "Partner Autocomplete" feature, verify the address and name against ARES.
+This module allows you to create a new partner by their Company ID (IČ), or update the name, address and VAT ID of an existing partner from ARES.
 
 * **Where to find it:** In the Contacts app, in the top menu bar: **Public Registers > Create from ARES**.
 ![Create from ARES](static/description/new_from_ares_menu_en.png)
@@ -11,7 +11,7 @@ This module allows you to create a new partner by their Company ID (IČ), or if 
 ![Load from ARES](static/description/new_from_ares_form_en.png)
 If another contact already has this IČ, the system warns you. The IČ field is shown for Czech partners and for partners without a country.
 
-* **How it works:** Simply enter the 8-digit IČ. The system connects to the ARES registry and automatically fills in:
+* **How it works:** Simply enter the IČ (up to 8 digits, shorter ones are completed with leading zeros). The system connects to the ARES registry and automatically fills in:
     * Business name
     * Complete address (including proper street and number formatting)
     * VAT ID (if the entity is a VAT payer)
@@ -33,7 +33,7 @@ For each Czech partner, the system tracks their reliability status in the VAT re
 ![Reliability Check](static/description/check_reliability_en.png)
 
 ## 3. Batch Operations
-* **Batch verification:** In the contact list (List View), you can select multiple records and use **Action > Check ARES Reliability (Batch)** to update the status of all selected partners at once.
+* **Batch verification:** In the contact list (List View), you can select multiple records and use **Action > Check VAT Payer Reliability (MFČR)** to update the status of all selected partners at once. Up to 100 partners are verified in one request; partners with a foreign VAT ID are skipped and keep their status.
 ![Batch Reliability Check](static/description/check_reliability_batch_en.png)
 
 ## Frequently Asked Questions (FAQ)

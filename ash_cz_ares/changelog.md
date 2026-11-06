@@ -1,3 +1,10 @@
+## 19.0.1.2.0 — 2026-10-01
+- The batch check of VAT payer reliability sends one request to the VAT registry for up to 100 contacts instead of one request per contact. Contacts with a foreign VAT ID are skipped and keep their status.
+- Errors are reported clearly also when ARES or the VAT registry return an invalid answer (e.g. during a maintenance window); when loading from ARES, the data is still filled in with a warning.
+- The VAT reliability is shown as a coloured badge in the contact form; the batch action is renamed to "Check VAT Payer Reliability (MFČR)".
+- The house number is loaded from ARES completely, including its letter (e.g. 14a).
+- Upgrade note: after installing this version, upgrade the module (Apps › Upgrade or `-u ash_cz_ares`); Odoo.sh does it automatically.
+
 ## 19.0.1.1.0 — 2026-09-29
 - Non-VAT payers are no longer reported as reliable payers: the new status "Not a VAT Payer" is shown when the VAT registry does not know the VAT ID. The VAT ID (DIČ) is taken from ARES according to the active VAT registration (the group VAT ID for VAT group members) instead of being guessed from the IČ, and a manually entered VAT ID is never deleted.
 - New "Load from ARES" button next to the IČ field fills the name, address and VAT ID directly in the contact form, without saving it; it replaces the "Refresh from ARES" action of the gear menu. VAT payers are verified automatically, and when the VAT registry is unavailable the data is filled in with a warning to verify later. The button next to the VAT ID is renamed to "Verify VAT Payer".

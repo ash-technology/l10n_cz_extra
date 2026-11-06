@@ -2,7 +2,7 @@
 
 # Modul Veřejné rejstříky (ARES, Registr plátců DPH)
 ## 1. Aktualizace základních údajů
-Modul umožňuje založit nového partnera podle IČ, nebo v případě, že používáte funkci "Partner autocomplete", ověřit adresu a název podle ARES.
+Modul umožňuje založit nového partnera podle IČ, nebo u stávajícího partnera aktualizovat název, adresu a DIČ podle ARES.
 
 * **Kde najdete:** V aplikaci Kontakty v horní liště: **Veřejné rejstříky > Vytvořit z ARES**.
 ![Vytvořit z ARES](static/description/new_from_ares_menu.png)
@@ -11,7 +11,7 @@ Modul umožňuje založit nového partnera podle IČ, nebo v případě, že pou
 ![Aktualizovat z ARES](static/description/new_from_ares_form.png)
 Pokud už IČ má jiný kontakt, systém vás na to upozorní. Pole IČ je vidět u českých partnerů a u partnerů bez vyplněné země.
 
-* **Funkčnost:** Stačí zadat osmimístné IČ. Systém se spojí s registrem ARES a automaticky vyplní:
+* **Funkčnost:** Stačí zadat IČ (až 8 číslic, kratší se doplní nulami zleva). Systém se spojí s registrem ARES a automaticky vyplní:
     * Obchodní jméno
     * Kompletní adresu (včetně správného formátování ulice a čísel)
     * DIČ (pokud je subjekt plátcem)
@@ -33,7 +33,7 @@ U každého českého partnera systém sleduje stav spolehlivosti v registru DPH
 ![Ověření spolehlivosti](static/description/check_reliability.png)
 
 ## 3. Hromadné akce
-* **Hromadná kontrola:** V seznamu kontaktů (List View) můžete označit více záznamů a přes tlačítko **Akce > Zkontrolovat spolehlivost plátce DPH** aktualizovat stav všech najednou.
+* **Hromadná kontrola:** V seznamu kontaktů (List View) můžete označit více záznamů a přes tlačítko **Akce > Zkontrolovat spolehlivost plátce DPH** aktualizovat stav všech najednou. V jednom dotazu se ověří až 100 partnerů; partneři se zahraničním DIČ se přeskočí a jejich stav zůstane beze změny.
 ![Hromadné ověření spolehlivosti](static/description/check_reliability_batch.png)
 
 ## Často kladené dotazy (FAQ)

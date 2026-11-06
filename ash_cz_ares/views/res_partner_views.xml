@@ -5,46 +5,22 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//widget[@name='web_ribbon']" position="after">
+                <!-- Shifted down so it does not overlap the Archived ribbon -->
                 <widget name="web_ribbon" title="UNRELIABLE"
-                    bg_color="bg-danger"
+                    bg_color="text-bg-danger"
                     invisible="is_unreliable_payer != 'unreliable'"
                     style="padding-top: 60px !important;"/>
             </xpath>
-
             <xpath expr="//field[@name='website']" position="before">
-
-                <field name="is_unreliable_payer" invisible="1"/>
-
-
-                <!-- label for="action_check_unreliable_vat_payer" string="VAT Status"/ -->
-                <div class="o_cell o_wrap_label text-break text-900">
-                    <label class="o_form_label" for="action_check_unreliable_vat_payer" string="VAT Status"/>
-                </div>
-            <div class="o_cell o_wrap_input text-break mb-3 mb-sm-0" style="">
-                <div name="is_unreliable_payer" class="o_field_widget o_field_char">
-
-                    <span invisible="is_unreliable_payer != 'unreliable'" class="text-danger fw-bold ms-2">
-                        <i class="fa fa-exclamation-triangle"/> Unreliable Payer
-                    </span>
-
-                    <span invisible="is_unreliable_payer != 'reliable'" class="text-success ms-2">
-                        <i class="fa fa-check-circle"/> Reliable Payer
-                    </span>
-
-                    <span invisible="is_unreliable_payer != 'not_vat_payer'" class="text-warning ms-2">
-                        <i class="fa fa-minus-circle"/> Not a VAT Payer
-                    </span>
-
-                    <span invisible="is_unreliable_payer != 'not_checked'" class="text-muted ms-2 italic">
-                        <i class="fa fa-question-circle"/> Not Checked
-                    </span>
-
+                <label for="is_unreliable_payer"/>
+                <div class="o_row">
+                    <field name="is_unreliable_payer" widget="badge"
+                        decoration-danger="is_unreliable_payer == 'unreliable'"
+                        decoration-success="is_unreliable_payer == 'reliable'"
+                        decoration-warning="is_unreliable_payer == 'not_vat_payer'"/>
                     <button name="action_check_unreliable_vat_payer" type="object"
-                            string="Verify VAT Payer"
-                            class="btn-link"
-                            icon="fa-refresh"/>
+                        string="Verify VAT Payer" class="btn-link" icon="fa-refresh"/>
                 </div>
-            </div>
             </xpath>
         </field>
     </record>
@@ -56,17 +32,17 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='company_registry'][not(ancestor::page)]" position="attributes">
                 <attribute name="widget">ares_company_registry</attribute>
-                <attribute name="string">Company ID</attribute>
                 <attribute name="invisible">country_code and country_code != 'CZ'</attribute>
             </xpath>
         </field>
     </record>
 
     <record id="action_server_batch_vat_check" model="ir.actions.server">
-        <field name="name">Check ARES Reliability (Batch)</field>
+        <field name="name">Check VAT Payer Reliability (MFČR)</field>
         <field name="model_id" ref="base.model_res_partner"/>
         <field name="binding_model_id" ref="base.model_res_partner"/>
-        <field name="binding_view_types">list</field> <field name="state">code</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
         <field name="code">records.action_check_unreliable_vat_payer()</field>
     </record>
 </odoo>

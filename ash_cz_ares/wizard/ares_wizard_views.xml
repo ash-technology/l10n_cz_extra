@@ -9,7 +9,7 @@
                         <div class="text-muted mb-3" colspan="2">
                             Enter the IČ (Company ID) to fetch details from the Czech Registry.
                         </div>
-                        <field name="ico" placeholder="e.g. 27082440"/>
+                        <field name="ico" placeholder="e.g. 08500045"/>
                     </group>
                 </sheet>
                 <footer>

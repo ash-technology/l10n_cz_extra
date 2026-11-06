@@ -1,0 +1,212 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ash_cz_ares
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260908\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 17:25+0000\n"
+"PO-Revision-Date: 2026-10-01 17:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid "ARES Connection Error: %(error)s"
+msgstr "Chyba spojení s ARES: %(error)s"
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid "ARES returned no business name for IČ %(ico)s."
+msgstr "ARES pro IČ %(ico)s nevrátil obchodní jméno."
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "Cancel"
+msgstr "Zrušit"
+
+#. module: ash_cz_ares
+#: model:ir.actions.server,name:ash_cz_ares.action_server_batch_vat_check
+msgid "Check VAT Payer Reliability (MFČR)"
+msgstr "Zkontrolovat spolehlivost plátce DPH"
+
+#. module: ash_cz_ares
+#: model:ir.model,name:ash_cz_ares.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "Create Company from ARES"
+msgstr "Vytvořit z ARES"
+
+#. module: ash_cz_ares
+#: model:ir.actions.act_window,name:ash_cz_ares.action_ares_wizard
+#: model:ir.ui.menu,name:ash_cz_ares.menu_ares_wizard_account_cust
+#: model:ir.ui.menu,name:ash_cz_ares.menu_ares_wizard_contact
+msgid "Create from ARES"
+msgstr "Vytvořit z ARES"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__create_uid
+msgid "Created by"
+msgstr "Vytvořil"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__create_date
+msgid "Created on"
+msgstr "Vytvořeno"
+
+#. module: ash_cz_ares
+#: model:ir.model,name:ash_cz_ares.model_l10n_cz_ares_connector
+msgid "Czech Public Registers Connector (ARES, MFČR)"
+msgstr "Konektor českých veřejných rejstříků (ARES, MFČR)"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_connector__display_name
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__display_name
+#: model:ir.model.fields,field_description:ash_cz_ares.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Zobrazovaný název"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "Enter the IČ (Company ID) to fetch details from the Czech Registry."
+msgstr "Zadejte IČ pro stažení údajů z ARES."
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,help:ash_cz_ares.field_l10n_cz_ares_wizard__ico
+msgid "Enter the IČ (up to 8 digits)"
+msgstr "Zadejte IČ (nejvýše 8 číslic)"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "Fetch & Create"
+msgstr "Vytvořit"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_connector__id
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__id
+#: model:ir.model.fields,field_description:ash_cz_ares.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__ico
+msgid "IČ"
+msgstr "IČ"
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid "IČ %(ico)s was not found in ARES."
+msgstr "IČ %(ico)s nebylo v ARES nalezeno."
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid "IČ must consist of 1 to 8 digits."
+msgstr "IČ musí mít 1 až 8 číslic."
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Změnil"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_l10n_cz_ares_wizard__write_date
+msgid "Last Updated on"
+msgstr "Změněno"
+
+#. module: ash_cz_ares
+#. odoo-javascript
+#: code:addons/ash_cz_ares/static/src/fields/ares_company_registry_field.xml:0
+msgid "Load from ARES"
+msgstr "Načíst z ARES"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields.selection,name:ash_cz_ares.selection__res_partner__is_unreliable_payer__not_checked
+msgid "Not Checked"
+msgstr "Neověřeno"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields.selection,name:ash_cz_ares.selection__res_partner__is_unreliable_payer__not_vat_payer
+msgid "Not a VAT Payer"
+msgstr "Neplátce DPH"
+
+#. module: ash_cz_ares
+#: model:ir.ui.menu,name:ash_cz_ares.menu_ares_root
+msgid "Public registers"
+msgstr "Veřejné rejstříky"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields.selection,name:ash_cz_ares.selection__res_partner__is_unreliable_payer__reliable
+msgid "Reliable"
+msgstr "Spolehlivý"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_partner_form_ares
+msgid "UNRELIABLE"
+msgstr "NESPOLEHLIVÝ"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields.selection,name:ash_cz_ares.selection__res_partner__is_unreliable_payer__unreliable
+msgid "Unreliable"
+msgstr "Nespolehlivý"
+
+#. module: ash_cz_ares
+#: model:ir.model.fields,field_description:ash_cz_ares.field_res_partner__is_unreliable_payer
+#: model:ir.model.fields,field_description:ash_cz_ares.field_res_users__is_unreliable_payer
+msgid "VAT Reliability"
+msgstr "Spolehlivost plátce DPH"
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid ""
+"VAT payer reliability could not be verified, verify it later manually: "
+"%(error)s"
+msgstr ""
+"Spolehlivost plátce DPH se nepodařilo ověřit, ověřte ji později ručně: "
+"%(error)s"
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid "VAT registry (MFČR) Connection Error: %(error)s"
+msgstr "Chyba spojení s registrem plátců DPH (MFČR): %(error)s"
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid "VAT registry (MFČR) returned an error: %(error)s"
+msgstr "Registr plátců DPH (MFČR) vrátil chybu: %(error)s"
+
+#. module: ash_cz_ares
+#. odoo-python
+#: code:addons/ash_cz_ares/models/ares_connector.py:0
+msgid "VAT registry (MFČR) returned an unknown status: %(status)s"
+msgstr "Registr plátců DPH (MFČR) vrátil neznámý stav: %(status)s"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_partner_form_ares
+msgid "Verify VAT Payer"
+msgstr "Ověřit plátce DPH"
+
+#. module: ash_cz_ares
+#: model:ir.model,name:ash_cz_ares.model_l10n_cz_ares_wizard
+msgid "Wizard to create Partner from ARES"
+msgstr "Vytvoření firmy z ARES"
+
+#. module: ash_cz_ares
+#: model_terms:ir.ui.view,arch_db:ash_cz_ares.view_ares_wizard_form
+msgid "e.g. 08500045"
+msgstr "např. 08500045"

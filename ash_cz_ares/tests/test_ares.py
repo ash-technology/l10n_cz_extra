@@ -12,9 +12,10 @@ MFCR_RESPONSE = (
     "<soapenv:Header/><soapenv:Body>"
     '<StatusNespolehlivyPlatceResponse xmlns="http://adis.mfcr.cz/rozhraniCRPDPH/">'
     '<status odpovedGenerovana="2026-09-28" statusCode="{code}" statusText="{text}"/>'
-    '<statusPlatceDPH dic="{dic}" nespolehlivyPlatce="{status}"/>'
+    "{payers}"
     "</StatusNespolehlivyPlatceResponse></soapenv:Body></soapenv:Envelope>"
 )
+MFCR_PAYER = '<statusPlatceDPH dic="{dic}" nespolehlivyPlatce="{status}"/>'
 ARES_ADDRESS = {
     "nazevObce": "Praha",
     "nazevUlice": "Újezd",
@@ -31,6 +32,13 @@ ARES_NON_PAYER = {
         "stavZdrojeSkDph": "NEEXISTUJICI",
     },
 }
+ARES_VAT_PAYER = {
+    "ico": "08500045",
+    "obchodniJmeno": "Ash technology s.r.o.",
+    "sidlo": ARES_ADDRESS,
+    "dic": "CZ08500045",
+    "seznamRegistraci": {"stavZdrojeDph": "AKTIVNI", "stavZdrojeSkDph": "NEEXISTUJICI"},
+}
 # Real ARES data: a VAT group member keeps its own DIC with an ended registration
 ARES_VAT_GROUP_MEMBER = {
     "ico": "04116364",
@@ -41,10 +49,10 @@ ARES_VAT_GROUP_MEMBER = {
     "seznamRegistraci": {"stavZdrojeDph": "ZANIKLY", "stavZdrojeSkDph": "AKTIVNI"},
 }
 ARES_FORMER_PAYER = {
-    "ico": "27082440",
+    "ico": "08500045",
     "obchodniJmeno": "Former Payer s.r.o.",
     "sidlo": ARES_ADDRESS,
-    "dic": "CZ27082440",
+    "dic": "CZ08500045",
     "seznamRegistraci": {"stavZdrojeDph": "ZANIKLY", "stavZdrojeSkDph": "NEEXISTUJICI"},
 }
 
@@ -56,8 +64,12 @@ def _response(content=b"", json_data=None, status_code=200):
     return response
 
 
-def _mfcr(status, dic="24148385", code="0", text="OK"):
-    body = MFCR_RESPONSE.format(status=status, dic=dic, code=code, text=text)
+def _mfcr(status, dic="24148385", code="0", text="OK", other_payers=()):
+    payers = "".join(
+        MFCR_PAYER.format(dic=payer_dic, status=payer_status)
+        for payer_dic, payer_status in [(dic, status), *other_payers]
+    )
+    body = MFCR_RESPONSE.format(payers=payers, code=code, text=text)
     return _response(content=body.encode())
 
 
@@ -85,19 +97,38 @@ class TestAres(TransactionCase):
         self._check(self.partner, _mfcr("ANO"))
         self.assertEqual(self.partner.is_unreliable_payer, "unreliable")
 
-    def test_batch_check_sets_status_per_partner(self):
+    def test_batch_check_uses_one_request_for_all_partners(self):
         other = self.env["res.partner"].create(
-            {"name": "Alza.cz a.s.", "vat": "CZ27082440"}
+            {"name": "Ash technology s.r.o.", "vat": "CZ08500045"}
         )
-        self._check(self.partner | other, _mfcr("NENALEZEN"), _mfcr("NE"))
+        post = self._check(
+            self.partner | other,
+            _mfcr("NENALEZEN", other_payers=[("08500045", "NE")]),
+        )
+        self.assertEqual(post.call_count, 1)
+        payload = post.call_args.kwargs["data"].decode()
+        self.assertIn("<roz:dic>24148385</roz:dic>", payload)
+        self.assertIn("<roz:dic>08500045</roz:dic>", payload)
         self.assertEqual(self.partner.is_unreliable_payer, "not_vat_payer")
         self.assertEqual(other.is_unreliable_payer, "reliable")
 
-    def test_foreign_vat_is_not_checked_in_czech_registry(self):
+    def test_batch_check_splits_requests_by_batch_size(self):
+        other = self.env["res.partner"].create(
+            {"name": "Ash technology s.r.o.", "vat": "CZ08500045"}
+        )
+        with patch("odoo.addons.ash_cz_ares.models.res_partner.MFCR_BATCH_SIZE", 1):
+            post = self._check(
+                self.partner | other, _mfcr("NE"), _mfcr("ANO", dic="08500045")
+            )
+        self.assertEqual(post.call_count, 2)
+        self.assertEqual(self.partner.is_unreliable_payer, "reliable")
+        self.assertEqual(other.is_unreliable_payer, "unreliable")
+
+    def test_foreign_vat_keeps_status(self):
         self.partner.write({"vat": "DE136695976", "is_unreliable_payer": "reliable"})
         post = self._check(self.partner)
         post.assert_not_called()
-        self.assertEqual(self.partner.is_unreliable_payer, "not_checked")
+        self.assertEqual(self.partner.is_unreliable_payer, "reliable")
 
     def test_partner_without_vat_keeps_status(self):
         self.partner.write({"vat": False, "is_unreliable_payer": "not_vat_payer"})
@@ -109,6 +140,14 @@ class TestAres(TransactionCase):
         with self.assertRaises(UserError):
             self._check(self.partner, _mfcr("NE", code="2", text="Technical error"))
         self.assertEqual(self.partner.is_unreliable_payer, "not_checked")
+
+    def test_unknown_registry_status_is_reported(self):
+        with self.assertRaisesRegex(UserError, "unknown status"):
+            self._check(self.partner, _mfcr("MOZNA"))
+
+    def test_malformed_registry_response_is_reported(self):
+        with self.assertRaises(UserError):
+            self._check(self.partner, _response(content=b"<html>maintenance"))
 
     def _run_wizard(self, ares_data, *mfcr_responses):
         wizard = self.env["l10n_cz.ares.wizard"].create({"ico": ares_data["ico"]})
@@ -133,6 +172,12 @@ class TestAres(TransactionCase):
         self.assertFalse(partner.vat)
         self.assertEqual(partner.is_unreliable_payer, "not_vat_payer")
         self.assertEqual(partner.street, "Újezd 450/40")
+
+    def test_wizard_vat_payer_gets_dic_and_is_verified(self):
+        action = self._run_wizard(ARES_VAT_PAYER, _mfcr("NE", dic="08500045"))
+        partner = self.env["res.partner"].browse(action["res_id"])
+        self.assertEqual(partner.vat, "CZ08500045")
+        self.assertEqual(partner.is_unreliable_payer, "reliable")
 
     def test_wizard_vat_group_member_gets_group_dic_and_is_verified(self):
         action = self._run_wizard(ARES_VAT_GROUP_MEMBER, _mfcr("NE", dic="699004572"))
@@ -175,17 +220,48 @@ class TestAres(TransactionCase):
         self.assertIn("down", result["warning"])
         self.assertEqual(result["values"]["is_unreliable_payer"], "not_checked")
 
-    def test_editor_keeps_status_of_unchanged_dic_when_vat_registry_is_down(self):
+    def test_editor_values_warn_when_vat_registry_response_is_malformed(self):
         result = self._editor_values(
-            ARES_VAT_GROUP_MEMBER,
-            "CZ699004572",
-            requests.exceptions.ConnectionError("down"),
+            ARES_VAT_GROUP_MEMBER, False, _response(content=b"<html>maintenance")
         )
-        self.assertNotIn("is_unreliable_payer", result["values"])
+        self.assertTrue(result["warning"])
+        self.assertEqual(result["values"]["vat"], "CZ699004572")
+        self.assertEqual(result["values"]["is_unreliable_payer"], "not_checked")
+
+    def test_editor_keeps_status_of_unchanged_dic_when_vat_registry_is_down(self):
+        for current_vat in ("CZ699004572", "CZ 699004572"):
+            result = self._editor_values(
+                ARES_VAT_GROUP_MEMBER,
+                current_vat,
+                requests.exceptions.ConnectionError("down"),
+            )
+            self.assertNotIn("is_unreliable_payer", result["values"])
 
     def test_editor_never_clears_vat_of_non_payer(self):
         result = self._editor_values(ARES_NON_PAYER, "CZ24148385")
         self.assertNotIn("vat", result["values"])
+        self.assertEqual(result["values"]["is_unreliable_payer"], "not_vat_payer")
+
+    def test_short_ico_is_zero_padded(self):
+        with patch.object(
+            requests, "get", return_value=_response(json_data=ARES_NON_PAYER)
+        ) as get:
+            result = self.env["res.partner"].ares_get_partner_values("123", False)
+        self.assertTrue(get.call_args.args[0].endswith("/00000123"))
+        self.assertEqual(result["values"]["company_registry"], "00000123")
+
+    def test_house_number_letter_is_kept(self):
+        data = dict(
+            ARES_NON_PAYER, sidlo=dict(ARES_ADDRESS, cisloOrientacniPismeno="a")
+        )
+        result = self._editor_values(data, False)
+        self.assertEqual(result["values"]["street"], "Újezd 450/40a")
+
+    def test_missing_address_parts_give_empty_values(self):
+        data = dict(ARES_NON_PAYER, sidlo=None, seznamRegistraci=None)
+        result = self._editor_values(data, False)
+        self.assertEqual(result["values"]["street"], "")
+        self.assertEqual(result["values"]["zip"], "")
         self.assertEqual(result["values"]["is_unreliable_payer"], "not_vat_payer")
 
     def test_empty_or_invalid_ico_is_rejected_without_request(self):
@@ -193,6 +269,22 @@ class TestAres(TransactionCase):
             with patch.object(requests, "get") as get, self.assertRaises(UserError):
                 self.env["res.partner"].ares_get_partner_values(ico, False)
             get.assert_not_called()
+
+    def test_ico_not_found_in_ares_is_reported(self):
+        with (
+            patch.object(requests, "get", return_value=_response(status_code=404)),
+            self.assertRaisesRegex(UserError, "not found in ARES"),
+        ):
+            self.env["res.partner"].ares_get_partner_values("24148385", False)
+
+    def test_malformed_ares_response_is_reported(self):
+        with (
+            patch.object(
+                requests, "get", return_value=_response(content=b"<html>maintenance")
+            ),
+            self.assertRaises(UserError),
+        ):
+            self.env["res.partner"].ares_get_partner_values("24148385", False)
 
     def test_missing_business_name_is_reported(self):
         data = dict(ARES_NON_PAYER, obchodniJmeno="")
@@ -211,5 +303,5 @@ class TestAres(TransactionCase):
             ),
             self.assertRaises(UserError) as error,
         ):
-            connector.fetch_ares_data("24148385")
+            connector._fetch_ares_data("24148385")
         self.assertEqual(str(error.exception), "Chyba spojení s ARES: down")

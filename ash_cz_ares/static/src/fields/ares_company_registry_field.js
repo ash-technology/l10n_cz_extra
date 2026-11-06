@@ -12,14 +12,22 @@ export class AresCompanyRegistryField extends CharField {
     }
 
     async onFetchFromAres() {
-        // Read the input directly: the typed value may not be committed to the record yet
-        const result = await this.orm.call("res.partner", "ares_get_partner_values", [
-            this.input.el.value,
-            this.props.record.data.vat,
-        ]);
-        await this.props.record.update(result.values);
-        if (result.warning) {
-            this.notification.add(result.warning, { type: "warning", sticky: true });
+        if (this.fetching) {
+            return;
+        }
+        this.fetching = true;
+        try {
+            // Read the input directly: the typed value may not be committed to the record yet
+            const result = await this.orm.call("res.partner", "ares_get_partner_values", [
+                this.input.el.value,
+                this.props.record.data.vat,
+            ]);
+            await this.props.record.update(result.values);
+            if (result.warning) {
+                this.notification.add(result.warning, { type: "warning", sticky: true });
+            }
+        } finally {
+            this.fetching = false;
         }
     }
 }
