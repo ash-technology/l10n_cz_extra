@@ -1,9 +1,14 @@
 # Backport of the "czk_qr" method of l10n_cz in Odoo 20.0
 # (odoo/odoo@060e7bdebe8e9ea210808f1760fe9c8b8cf1e415, Copyright Odoo S.A.,
-# LGPL-3), adapted to the Odoo 19.0 field names. It must keep behaving exactly
-# like the original, so that migrating to 20.0 only means uninstalling this module.
-import re
-
+# LGPL-3), adapted to the Odoo 19.0 field names.
+# Deviation from Odoo 20.0: Odoo 20.0 searches the invoice by the payment
+# communication and makes the variable symbol of the digits of the invoice
+# number, which is wrong on vendor bills (the vendor's variable symbol ends up in
+# the message) and picks a wrong invoice when several share a payment reference.
+# Here the invoice is passed in the context (account.move._generate_qr_code, the
+# payment register wizard), the variable symbol is its payment reference and the
+# message is the vendor's bill number (ref) for outgoing payments and the invoice
+# number otherwise.
 from odoo import api, models
 
 from odoo.addons.base_iban.models.res_partner_bank import get_iban_part
@@ -22,15 +27,13 @@ class ResPartnerBank(models.Model):
         structured_communication,
     ):
         if qr_method == "czk_qr":
-            invoice = self.env["account.move"].search(
-                [
-                    *self.env["account.move"]._check_company_domain(self.env.company),
-                    "|",
-                    ("payment_reference", "=", free_communication),
-                    ("name", "=", free_communication),
-                ],
-                limit=1,
+            invoice = self.env["account.move"].browse(
+                self.env.context.get("ash_cz_qr_move_id")
             )
+            if invoice:
+                message = invoice.ref if invoice.is_outbound() else invoice.name
+            else:
+                message = free_communication
 
             qr_code_vals = {
                 # Account Number
@@ -44,15 +47,13 @@ class ResPartnerBank(models.Model):
                 if invoice and invoice.invoice_date_due
                 else "",
                 # Message for Recipient
-                "MSG": free_communication[:60] if free_communication else "",
+                "MSG": message[:60] if message else "",
                 # Recipient Name
                 "RN": (self.acc_holder_name or self.partner_id.name)[:35],
                 # Payment Type
                 "PT": "IP",
                 # Variable Symbol
-                "X-VS": re.sub(r"\D+", "", invoice.name)
-                if invoice and invoice.name
-                else "",
+                "X-VS": invoice.payment_reference or "",
             }
 
             qr_code_data = "*".join(

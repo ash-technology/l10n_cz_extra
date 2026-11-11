@@ -1,6 +1,6 @@
 {
     "name": "Czech QR Payment (QR Platba / SPAYD)",
-    "version": "19.0.2.1.0",
+    "version": "19.0.3.0.0",
     "depends": ["account", "base_iban"],
     "countries": ["cz"],
     "category": "Accounting/Localizations",

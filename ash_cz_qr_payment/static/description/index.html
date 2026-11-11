@@ -49,13 +49,15 @@
         </div>
         <div class="oe_span6">
             <h3><b>Complete payment data</b></h3>
-            <p>The QR code contains the IBAN, the amount due, the due date, the payment reference as the message,
-               the recipient name and the variable symbol made of the digits of the invoice number.</p>
+            <p>The QR code contains the IBAN, the amount due, the due date, the payment reference as the variable
+               symbol, the invoice number as the message (on vendor bills the vendor's invoice number) and
+               the recipient name. Odoo also shows it when you register a payment of a vendor bill.</p>
         </div>
         <div class="oe_span6">
             <h3><b>Ready for Odoo 20</b></h3>
-            <p>The QR method is the same as in the Czech localization of Odoo 20: when you migrate to Odoo 20,
-               uninstall this module. Odoo 20 prints only the IBAN on the invoice; the Czech account number
+            <p>The QR method is the same as in the Czech localization of Odoo 20, except for the variable symbol
+               and the message (Odoo 20 uses the digits of the invoice number and the payment reference):
+               when you migrate to Odoo 20, uninstall this module unless you need them. Odoo 20 prints only the IBAN on the invoice; the Czech account number
                is a feature of this module and disappears with it.</p>
         </div>
     </div>
@@ -73,9 +75,11 @@
                 <li>Enable <b>Send Money</b> on the account.</li>
                 <li>With several bank accounts, set the <b>Currency</b> of each. A new invoice gets the first trusted account
                     in its currency (or without a currency) as the <b>Recipient Bank</b>.</li>
+                <li>On each sales journal, set <b>Communication Standard</b> to <b>Numbers only</b>
+                    (Advanced Settings): the payment reference, used as the variable symbol, is then made of digits.</li>
             </ol>
             <p>The QR code is shown only on unpaid CZK invoices, not on credit notes and paid invoices.
-               QR Platba allows at most 10 digits in the variable symbol, so keep your invoice numbering within 10 digits.</p>
+               QR Platba allows only digits in the variable symbol, at most 10.</p>
         </div>
         <div class="oe_span6">
             <div class="oe_demo oe_picture oe_screenshot">

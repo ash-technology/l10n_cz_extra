@@ -8,7 +8,7 @@ The QR code is a standard Odoo payment QR method (like the SEPA QR code), so it 
 
 > **Bank account as IBAN.** Enter your company bank account as IBAN (e.g. `CZ65 0800 0000 1920 0014 5399`): the QR code requires it, and with the Czech format `123-456/0800` the invoice gets no QR code. Your customers still see the familiar account number: the module extends the standard invoice report to print the Czech format derived from the IBAN (e.g. `19-2000145399/0800`), with the IBAN on the next line. See [Bank account on the invoice](#bank-account-on-the-invoice).
 
-> **Upgrading?** Read [Upgrading from version 19.0.1.x](#upgrading-from-version-1901x) before you upgrade. If you print invoices with a copy of the invoice report (e.g. duplicated in Studio), read [Copies of the invoice report](#copies-of-the-invoice-report-eg-studio) too: module updates don't reach the copy.
+> **Upgrading?** Read [Upgrading to version 19.0.3.x](#upgrading-to-version-1903x) (and, from version 19.0.1.x, also [Upgrading from version 19.0.1.x](#upgrading-from-version-1901x)) before you upgrade. If you print invoices with a copy of the invoice report (e.g. duplicated in Studio), read [Copies of the invoice report](#copies-of-the-invoice-report-eg-studio) too: module updates don't reach the copy.
 
 ## Setup
 
@@ -17,14 +17,19 @@ The QR code is a standard Odoo payment QR method (like the SEPA QR code), so it 
 2. **Enter your bank account as IBAN**, e.g. `CZ65 0800 0000 1920 0014 5399`, in Contacts > Configuration > Bank Accounts or in your bank journal (**Bank Account Number**). The Czech format `123-456/0800` is not supported, but the invoice prints it for you (see [Bank account on the invoice](#bank-account-on-the-invoice)). You can find your IBAN in your internet banking or calculate it with the [Czech National Bank calculator](https://www.cnb.cz/cs/platebni-styk/iban/kalkulator-iban-ceska-republika/).
 3. **Trust the account:** in the bank account, enable **Send Money**.
 4. **Several bank accounts:** set the **Currency** of each. A new invoice gets the first trusted account in its currency (or without a currency) as the **Recipient Bank**; you can check it on the invoice, in the Other Info tab.
+5. **Variable symbol:** on each sales journal, set **Communication Standard** to **Numbers only** (Invoicing > Configuration > Journals > the journal > Advanced Settings). The payment reference of the invoices is then made of the digits of the invoice number (or of the customer reference with the Communication Type **Based on Customer**), and it is used as the variable symbol.
 
 ## What is in the QR code
 
 * IBAN of the invoice's Recipient Bank and the amount due in CZK
-* Due date and the payment reference as the message
-* Variable symbol: the digits of the invoice number (e.g. INV/2026/00001 gives 202600001). QR Platba allows at most 10 digits, so keep your invoice numbering within 10 digits.
+* Due date
+* Variable symbol: the **Payment Reference** of the invoice, as it is. On customer invoices it is filled when the invoice is posted, according to the journal setting (see [Setup](#setup), point 5); you can change it, e.g. to a contract number. On vendor bills, enter the vendor's variable symbol there. QR Platba allows only digits, at most 10.
+* Message: the invoice number; on vendor bills and on customer credit notes, the **Bill Reference** (the vendor's invoice number)
+* Recipient name
 
 The QR code is shown only on unpaid CZK invoices. It is not shown on credit notes and on paid invoices.
+
+When you register a payment of a CZK vendor bill (or a refund of a customer credit note), Odoo shows the QR code in the payment dialog too, so you can pay it from your banking app. It needs the vendor's account as an IBAN with **Send Money** enabled. A payment of several bills at once gets a QR code without the variable symbol and the due date.
 
 ## Bank account on the invoice
 
@@ -90,6 +95,24 @@ The text "on this account:" stays as it is, so its translation is kept.
 
 A copy that contains `_get_cz_acc_number` fails to print once the module is uninstalled. Before you uninstall it, put the original part back: replace the block from case 2 with the first snippet of case 2.
 
+## Upgrading to version 19.0.3.x
+
+Version 19.0.3.x takes the variable symbol from the **Payment Reference** of the invoice, without changes, instead of the digits of the invoice number. This fixes vendor bills: the QR code in the payment dialog had the digits of your internal bill number as the variable symbol and the vendor's variable symbol as the message.
+
+What to do:
+
+1. On each sales journal for CZK invoices, set **Communication Standard** to **Numbers only** (Invoicing > Configuration > Journals > the journal > Advanced Settings). With the default **Full Reference**, the payment reference is e.g. `INV/2026/00001`, which is not a valid variable symbol: banking apps reject the QR code or ignore the variable symbol.
+2. The setting applies to invoices posted from then on. Unpaid invoices posted before keep their payment reference: if it is not made of digits only, correct the **Payment Reference** on the invoice before you print or send it again.
+3. On vendor bills, the **Payment Reference** must contain the vendor's variable symbol and the **Bill Reference** the vendor's invoice number.
+
+Other changes:
+
+* The message is the invoice number on customer invoices (no longer the payment reference) and the Bill Reference on vendor bills and customer credit notes.
+* The QR code always uses the data of the invoice being paid. Previously, the invoice was searched by the payment reference, so with the same reference on several invoices (e.g. a contract number) the due date could come from another invoice.
+* This differs from Odoo 20, see [FAQ](#frequently-asked-questions-faq), Odoo 20.
+
+If you upgrade from version 19.0.1.x, go through the next section too; its note on the variable symbol is replaced by this section.
+
 ## Upgrading from version 19.0.1.x
 
 Version 19.0.2.x replaces the module's own QR code with the standard Odoo QR method. Go through the points below before you upgrade. If you can't do it now, stay on 19.0.1.0.0 and don't replace the module files yet; that version stays available as the tag [ash_cz_qr_payment-19.0.1.0.0](https://github.com/ash-technology/l10n_cz_extra/releases/tag/ash_cz_qr_payment-19.0.1.0.0).
@@ -137,7 +160,7 @@ Either the Recipient Bank of the invoice is not a Czech IBAN (starting with CZ),
 That is a different feature: the QR code for paying online via the customer portal (payment providers). It is enabled by the **Add QR-code link on PDF** setting and does not depend on this module.
 
 **Odoo 20**
-Odoo 20 contains the same functionality in its Czech localization. When you migrate to Odoo 20, uninstall this module. Odoo 20 prints only the IBAN on the invoice; the Czech account number is a feature of this module and disappears with it. If you print invoices with a copy of the invoice report, see [Copies of the invoice report](#3-before-you-uninstall-the-module-odoo-20), case 3, before you uninstall the module.
+Odoo 20 contains the same QR method in its Czech localization, except for the variable symbol and the message: Odoo 20 makes the variable symbol of the digits of the invoice number and uses the payment reference as the message, also on vendor bills. When you migrate to Odoo 20, uninstall this module, unless you need its variable symbol and message. Odoo 20 prints only the IBAN on the invoice; the Czech account number is a feature of this module and disappears with it. If you print invoices with a copy of the invoice report, see [Copies of the invoice report](#3-before-you-uninstall-the-module-odoo-20), case 3, before you uninstall the module.
 
 ---
 
@@ -145,7 +168,7 @@ Odoo 20 contains the same functionality in its Czech localization. When you migr
 
 This module is developed and maintained by **[Ash technology s.r.o.](https://www.ashtechnology.eu)**, an official Odoo partner based in the Czech Republic.
 
-The code of the QR method is taken from the `czk_qr` method of the `l10n_cz` module of Odoo 20.0 Community (© Odoo S.A., LGPL-3) and adapted to Odoo 19.
+The code of the QR method is taken from the `czk_qr` method of the `l10n_cz` module of Odoo 20.0 Community (© Odoo S.A., LGPL-3), adapted to Odoo 19 and changed in the variable symbol and the message (see [Upgrading to version 19.0.3.x](#upgrading-to-version-1903x)).
 
 These modules are free and open-source. We welcome your feedback and feature requests – if your idea benefits the community, we're happy to include it.
 

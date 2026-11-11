@@ -1,3 +1,10 @@
+## 19.0.3.0.0 — 2026-11-11
+- The variable symbol is the payment reference of the invoice, without changes, instead of the digits of the invoice number. On vendor bills, the QR code in the payment dialog had the digits of the internal bill number as the variable symbol and the vendor's variable symbol as the message.
+- The message is the invoice number, on vendor bills and customer credit notes the bill reference (the vendor's invoice number).
+- The QR code takes the due date and the other data from the invoice being paid; previously the invoice was searched by the payment reference and could be another invoice with the same reference.
+- This differs from Odoo 20, whose Czech localization keeps the previous behavior.
+- Upgrade note: set the Communication Standard of the sales journals to "Numbers only" and correct the payment reference of unpaid invoices that is not made of digits; see "Upgrading to version 19.0.3.x" in the README.
+
 ## 19.0.2.1.0 — 2026-11-01
 - For a Czech IBAN, the invoice prints the account number in the Czech format (e.g. 19-2000145399/0800) and the IBAN on the next line, so that customers can pay by hand also in banking apps that do not accept an IBAN. Odoo 20 prints only the IBAN, so this line disappears when the module is uninstalled.
 - Upgrade guide: added the step to enable the "QR Codes" setting, which version 19.0.1.x did not need.
